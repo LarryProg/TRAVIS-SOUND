@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎶</text></svg>">
+<title>El Sonido Travis — Guía Armónica</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070707;--s1:#101010;--s2:#181818;--bd:#222;--tx:#e6e2d8;--mu:#555;--ac:#d4781a;--ac2:#7c5cbf;--red:#c94040}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--tx);font-family:'DM Mono',monospace;font-size:14px;line-height:1.6;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:44px 44px;pointer-events:none;z-index:0}
+.wrap{max-width:900px;margin:0 auto;padding:0 2rem;position:relative;z-index:1}
+
+/* HERO */
+.hero{padding:6rem 0 4rem;border-bottom:1px solid var(--bd)}
+.hero-tag{font-size:11px;letter-spacing:.18em;color:var(--ac);text-transform:uppercase;margin-bottom:1rem}
+.hero-title{font-family:'Bebas Neue',sans-serif;font-size:100px;line-height:.88;letter-spacing:.01em;margin-bottom:1.5rem}
+.hero-title span{color:var(--ac)}
+.hero-sub{font-size:13px;color:var(--mu);max-width:500px;margin-bottom:2.5rem;line-height:1.9}
+.stat-row{display:flex;gap:2.5rem;flex-wrap:wrap}
+.stat{border-left:2px solid var(--ac);padding-left:.75rem}
+.stat-n{font-family:'Bebas Neue',sans-serif;font-size:34px;color:var(--tx);line-height:1}
+.stat-l{font-size:11px;color:var(--mu);text-transform:uppercase;letter-spacing:.08em}
+
+/* SECTIONS */
+section{padding:5rem 0;border-bottom:1px solid var(--bd)}
+.sec-tag{font-size:11px;letter-spacing:.18em;color:var(--ac);text-transform:uppercase;margin-bottom:.4rem}
+.sec-title{font-family:'Bebas Neue',sans-serif;font-size:52px;line-height:1;margin-bottom:1.25rem}
+.sec-body{font-size:13px;color:var(--mu);max-width:540px;line-height:1.9;margin-bottom:3rem}
+
+/* SCALE */
+.scale-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.scale-card{background:var(--s1);border:1px solid var(--bd);border-radius:8px;padding:1.5rem}
+.scale-name{font-family:'Bebas Neue',sans-serif;font-size:24px;margin-bottom:3px}
+.scale-name.hl{color:var(--ac)}
+.scale-formula{font-size:11px;color:var(--mu);margin-bottom:1.25rem;letter-spacing:.04em}
+.scale-notes{display:flex;gap:5px;flex-wrap:wrap;margin-top:1rem}
+.note-pill{font-size:11px;padding:3px 8px;border-radius:3px;border:1px solid var(--bd);color:var(--mu)}
+.note-pill.on{background:var(--ac);border-color:var(--ac);color:#fff;font-weight:500}
+.note-pill.diff{background:var(--red);border-color:var(--red);color:#fff}
+.diff-note{font-size:12px;color:var(--red);margin-top:.75rem;line-height:1.7}
+
+/* PHRYGIAN BOX */
+.phryg-box{background:var(--s1);border:1px solid var(--ac);border-radius:8px;padding:2rem;display:flex;align-items:center;gap:3rem;flex-wrap:wrap}
+.chord-move{display:flex;align-items:center;gap:1.25rem}
+.big-c{text-align:center}
+.big-cn{font-family:'Bebas Neue',sans-serif;font-size:64px;line-height:1}
+.big-cr{font-size:11px;color:var(--mu);letter-spacing:.1em;text-transform:uppercase}
+.big-ct{font-size:11px;color:var(--ac);text-transform:uppercase;letter-spacing:.1em;margin-top:3px}
+.arr{display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0}
+.arr-line{width:52px;height:2px;background:var(--ac);position:relative}
+.arr-line::after{content:'';position:absolute;right:-1px;top:-4px;border:5px solid transparent;border-left-color:var(--ac)}
+.arr-label{font-size:10px;color:var(--ac);letter-spacing:.08em;text-transform:uppercase}
+
+/* PROGRESSIONS */
+.prog-list{display:flex;flex-direction:column;gap:2rem}
+.prog-item{background:var(--s1);border:1px solid var(--bd);border-radius:8px;overflow:hidden}
+.prog-hdr{padding:1rem 1.5rem;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.prog-name{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.02em}
+.prog-mood{font-size:11px;color:var(--ac);text-transform:uppercase;letter-spacing:.1em;margin-top:2px}
+.play-btn{background:none;border:1px solid var(--ac);color:var(--ac);font-family:'DM Mono',monospace;font-size:11px;padding:6px 18px;border-radius:4px;cursor:pointer;text-transform:uppercase;letter-spacing:.1em;transition:all .15s;flex-shrink:0}
+.play-btn:hover,.play-btn.on{background:var(--ac);color:#fff}
+.chord-row{display:flex;padding:1.5rem;gap:.75rem;align-items:center;overflow-x:auto}
+.chord-card{background:var(--s2);border:1px solid var(--bd);border-radius:6px;padding:.875rem;flex:1;min-width:130px;cursor:pointer;transition:border-color .15s}
+.chord-card:hover{border-color:var(--ac)}
+.chord-sep{font-size:22px;color:var(--bd);flex-shrink:0;user-select:none}
+.c-roman{font-size:11px;color:var(--mu);margin-bottom:3px;letter-spacing:.06em}
+.c-name{font-family:'Bebas Neue',sans-serif;font-size:26px;margin-bottom:.6rem}
+.c-notes{font-size:11px;color:var(--mu);margin-top:.4rem}
+.prog-note{padding:.75rem 1.5rem;font-size:12px;color:var(--mu);border-top:1px solid var(--bd);line-height:1.8}
+
+/* VOICINGS */
+.voicing-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:2rem}
+.v-card{background:var(--s1);border:1px solid var(--bd);border-radius:8px;padding:1.25rem;cursor:pointer;transition:border-color .15s}
+.v-card:hover{border-color:var(--ac)}
+.v-title{font-family:'Bebas Neue',sans-serif;font-size:22px;margin-bottom:2px}
+.v-type{font-size:11px;color:var(--ac);text-transform:uppercase;letter-spacing:.08em;margin-bottom:1rem}
+.v-desc{font-size:12px;color:var(--mu);margin-top:.75rem;line-height:1.8}
+.v-notes{font-size:11px;color:var(--mu);margin-top:.5rem}
+
+/* TIPS */
+.tips-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:2rem}
+.tip{background:var(--s1);border:1px solid var(--bd);border-radius:8px;padding:1.25rem}
+.tip-n{font-family:'Bebas Neue',sans-serif;font-size:38px;color:var(--ac);line-height:1;margin-bottom:.4rem}
+.tip-t{font-size:13px;font-weight:500;margin-bottom:.4rem}
+.tip-b{font-size:12px;color:var(--mu);line-height:1.8}
+
+/* CHART */
+.chart-row{display:grid;grid-template-columns:2fr 1fr;gap:1.5rem}
+.chart-box{background:var(--s1);border:1px solid var(--bd);border-radius:8px;padding:1.25rem}
+.chart-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--mu);margin-bottom:1rem}
+.legend-row{display:flex;gap:1.25rem;flex-wrap:wrap;margin-top:.75rem;font-size:11px;color:var(--mu)}
+.legend-dot{width:10px;height:10px;border-radius:2px;display:inline-block;flex-shrink:0}
+
+/* LOGO */
+.logo-wrap{margin-bottom:1.75rem}
+.logo-larry{height:64px;width:auto;display:block}
+
+/* HANDLE */
+.handle-link{display:inline-block;font-size:11px;letter-spacing:.14em;color:var(--mu);text-decoration:none;text-transform:uppercase;margin-bottom:1.5rem;transition:color .15s}
+.handle-link:hover{color:var(--ac)}
+.sec-handle{display:block;font-size:11px;letter-spacing:.14em;color:var(--mu);text-decoration:none;text-transform:uppercase;margin-top:.35rem;margin-bottom:1.1rem;transition:color .15s}
+.sec-handle:hover{color:var(--ac)}
+
+/* FOOTER */
+.footer{padding:3rem 0;text-align:center}
+.footer-tx{font-size:11px;color:var(--mu);letter-spacing:.12em;text-transform:uppercase}
+.footer-tx a{color:var(--mu);text-decoration:none;transition:color .15s}
+.footer-tx a:hover{color:var(--ac)}
+
+@media(max-width:640px){
+  .hero-title{font-size:62px}
+  .scale-grid,.voicing-grid,.chart-row,.tips-grid{grid-template-columns:1fr}
+  .phryg-box{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div class="logo-wrap">
+    <img src="LOGO_LARRY_transparente.png" alt="Larry" class="logo-larry">
+  </div>
+  <p class="hero-tag">Guía Armónica · 20 MIDIs Analizados</p>
+  <h1 class="hero-title">El Sonido<br><span>Travis</span></h1>
+  <a href="https://www.instagram.com/larry.prod/" target="_blank" rel="noopener" class="handle-link">@larry.prod</a>
+  <p class="hero-sub">Escalas, progresiones, voicings y el movimiento armónico que define el sonido. Basado en análisis real de 20 loops MIDI estilo Travis Scott. Hacé click en los acordes para escucharlos.</p>
+  <div class="stat-row">
+    <div class="stat"><div class="stat-n">95%</div><div class="stat-l">Minor / Phrygian</div></div>
+    <div class="stat"><div class="stat-n">6.2</div><div class="stat-l">Notas únicas avg</div></div>
+    <div class="stat"><div class="stat-n">47%</div><div class="stat-l">Saltos grandes</div></div>
+    <div class="stat"><div class="stat-n">40%</div><div class="stat-l">Modo Frigio</div></div>
+  </div>
+</header>
+
+<!-- 01 ESCALAS -->
+<section>
+  <p class="sec-tag">01 — Fundamentos</p>
+  <h2 class="sec-title">Las Escalas</h2>
+  <a href="https://www.instagram.com/larry.prod/" target="_blank" rel="noopener" class="sec-handle">@larry.prod</a>
+  <p class="sec-body">El 95% de los loops usan Natural Minor o Phrygian. La diferencia es una sola nota — pero esa nota lo cambia todo: la ♭2 del Frigio genera la tensión característica del sound. Ambas se pueden usar en la misma tonalidad; el contexto decide cuál.</p>
+  <div class="scale-grid" id="scaleGrid"></div>
+</section>
+
+<!-- 02 FIRMA PHRYGIA -->
+<section>
+  <p class="sec-tag">02 — La Firma</p>
+  <h2 class="sec-title">El Movimiento Phrygian</h2>
+  <a href="https://www.instagram.com/larry.prod/" target="_blank" rel="noopener" class="sec-handle">@larry.prod</a>
+  <p class="sec-body">El movimiento más identificable del sonido: el ♭II resolviendo al i. En Am Frigio es B♭ → Am. Solo medio tono de distancia, y esa tensión mínima crea una gravedad hipnótica. Muchos loops Travis no necesitan nada más que estos dos acordes en loop.</p>
+  <div class="phryg-box">
+    <div>
+      <div class="chord-move">
+        <div class="big-c">
+          <div class="big-cn">B♭</div>
+          <div class="big-cr">♭II · Acorde Frigio</div>
+          <div class="big-ct">Tensión</div>
+        </div>
+        <div class="arr">
+          <div class="arr-line"></div>
+          <span class="arr-label">½ tono</span>
+        </div>
+        <div class="big-c">
+          <div class="big-cn">Am</div>
+          <div class="big-cr">i · Tónica</div>
+          <div class="big-ct">Resolución</div>
+        </div>
+      </div>
+      <div style="margin-top:1.5rem;display:flex;gap:.75rem;align-items:center">
+        <button class="play-btn" id="phrygBtn" onclick="playPhrygianDemo()">▶ Escuchar</button>
+        <span style="font-size:11px;color:var(--mu)">B♭maj7 → Am → B♭maj7 → Am</span>
+      </div>
+    </div>
+    <div id="phrygPiano" style="flex:1;min-width:180px"></div>
+  </div>
+</section>
+
+<!-- 03 PROGRESIONES -->
+<section>
+  <p class="sec-tag">03 — Progresiones</p>
+  <h2 class="sec-title">Los Loops Armónicos</h2>
+  <a href="https://www.instagram.com/larry.prod/" target="_blank" rel="noopener" class="sec-handle">@larry.prod</a>
+  <p class="sec-body">Todo en La menor como referencia — pero los patrones son los mismos en cualquier tonalidad. Hacé click en cada acorde para escucharlo individualmente, o tocá el loop completo con el botón de la derecha.</p>
+  <div class="prog-list" id="progList"></div>
+</section>
+
+<!-- 04 VOICINGS -->
+<section>
+  <p class="sec-tag">04 — Voicing</p>
+  <h2 class="sec-title">Cómo Armar los Acordes</h2>
+  <a href="https://www.instagram.com/larry.prod/" target="_blank" rel="noopener" class="sec-handle">@larry.prod</a>
+  <p class="sec-body">La diferencia entre un acorde que suena demo y uno que suena like a record está en el voicing. El estilo Travis tiene reglas claras: spread, extensiones y espacio. Hacé click en cada voicing para escucharlo.</p>
+  <div class="voicing-grid" id="voicingGrid"></div>
+  <div class="tips-grid">
+    <div class="tip"><div class="tip-n">01</div><div class="tip-t">Omitir la quinta</div><div class="tip-b">La 5ª es la nota más obvia de un acorde menor. Sacarla hace que el acorde suene más abierto y se mezcle mejor con el 808 que se encarga del bajo.</div></div>
+    <div class="tip"><div class="tip-n">02</div><div class="tip-t">Spread voicing</div><div class="tip-b">Root abajo, espacio en el medio, extensiones arriba. Am spread: A2 – C4 – G4 – B4. Ese hueco central es el aire característico del sonido.</div></div>
+    <div class="tip"><div class="tip-n">03</div><div class="tip-t">Agregar la 9na</div><div class="tip-b">La 9na (segunda mayor) transforma cualquier acorde menor. Am(add9) = A C E B. Esa nota B sobre el Am es lo que da el tono melancólico dreamy.</div></div>
+    <div class="tip"><div class="tip-n">04</div><div class="tip-t">♭IImaj7</div><div class="tip-b">El acorde Frigio con major 7 es devastador. Bbmaj7 = Bb D F A. La maj7 (A) crea disonancia suave que pide resolver al Am — tensión que nunca se resuelve del todo.</div></div>
+    <div class="tip"><div class="tip-n">05</div><div class="tip-t">Velocity dinámica</div><div class="tip-b">No hay velocidades uniformes en el estilo Travis. Rango 55–90. Las notas "fantasma" (vel 30–50) crean la textura nebulosa que define el sound.</div></div>
+    <div class="tip"><div class="tip-n">06</div><div class="tip-t">Notas angulares</div><div class="tip-b">El análisis muestra que el 47% del movimiento melódico son saltos de 6+ semitonos. Evitá los runs escalares — saltá entre notas, no corras por la escala.</div></div>
+  </div>
+</section>
+
+<!-- 05 DATA -->
+<section>
+  <p class="sec-tag">05 — Del Análisis Real</p>
+  <h2 class="sec-title">Los Números</h2>
+  <a href="https://www.instagram.com/larry.prod/" target="_blank" rel="noopener" class="sec-handle">@larry.prod</a>
+  <p class="sec-body">Insights extraídos del análisis de los 20 MIDIs con Python. Cada dato confirma una decisión armónica consciente detrás del sonido.</p>
+  <div class="chart-row">
+    <div class="chart-box">
+      <p class="chart-lbl">Movimiento melódico por archivo</p>
+      <div style="position:relative;height:290px"><canvas id="intChart" role="img" aria-label="Stacked bar: interval types per MIDI file">Stepwise, medium, and large intervals across 20 files</canvas></div>
+      <div class="legend-row">
+        <span style="display:flex;align-items:center;gap:5px"><span class="legend-dot" style="background:#1D9E75"></span>Semitono 1-2st</span>
+        <span style="display:flex;align-items:center;gap:5px"><span class="legend-dot" style="background:#5b9bd5"></span>Medio 3-5st</span>
+        <span style="display:flex;align-items:center;gap:5px"><span class="legend-dot" style="background:#d4781a"></span>Salto 6+st</span>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1.25rem">
+      <div class="chart-box">
+        <p class="chart-lbl">Escalas</p>
+        <div style="position:relative;height:170px"><canvas id="scChart" role="img" aria-label="Donut: Natural Minor 55%, Phrygian 40%, Major 5%">Natural Minor 11, Phrygian 8, Major 1</canvas></div>
+        <div class="legend-row" style="flex-direction:column;gap:5px">
+          <span style="display:flex;align-items:center;gap:5px"><span class="legend-dot" style="background:#7c5cbf"></span>Nat. Minor 55%</span>
+          <span style="display:flex;align-items:center;gap:5px"><span class="legend-dot" style="background:#d4781a"></span>Phrygian 40%</span>
+          <span style="display:flex;align-items:center;gap:5px"><span class="legend-dot" style="background:#333"></span>Major 5%</span>
+        </div>
+      </div>
+      <div class="chart-box">
+        <p class="chart-lbl">Notas únicas avg</p>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:56px;color:var(--ac);line-height:1;margin:.25rem 0 .25rem">6.2</div>
+        <div style="font-size:11px;color:var(--mu);line-height:1.7">De 12 posibles. Economía extrema — pocas notas, mucho espacio. Cuantas menos notas, más hipnótico el loop.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <p class="footer-tx">Basado en análisis de 20 MIDIs · Creado por <a href="https://www.instagram.com/larry.prod/" target="_blank" rel="noopener">@larry.prod</a></p>
+</footer>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+// ── AUDIO ──────────────────────────────────────
+var AC = window.AudioContext || window.webkitAudioContext;
+var ac = null, rv = null;
+
+function gAC(){if(!ac)ac=new AC();return ac;}
+
+function mkReverb(ctx){
+  var c=ctx.createConvolver(),len=ctx.sampleRate*2.8,buf=ctx.createBuffer(2,len,ctx.sampleRate);
+  for(var ch=0;ch<2;ch++){var d=buf.getChannelData(ch);for(var i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,1.7);}
+  c.buffer=buf;return c;
+}
+
+function mf(n){return 440*Math.pow(2,(n-69)/12);}
+
+function playN(ctx,rvb,freq,t,dur){
+  var env=ctx.createGain(),o1=ctx.createOscillator(),o2=ctx.createOscillator();
+  o1.type='triangle';o2.type='sine';
+  o1.frequency.value=freq;o2.frequency.value=freq;o2.detune.value=5;
+  env.gain.setValueAtTime(0,t);
+  env.gain.linearRampToValueAtTime(0.2,t+0.04);
+  env.gain.exponentialRampToValueAtTime(0.001,t+dur);
+  o1.connect(env);o2.connect(env);
+  var g=ctx.createGain();g.gain.value=0.4;
+  env.connect(g);g.connect(rvb);g.connect(ctx.destination);
+  o1.start(t);o2.start(t);o1.stop(t+dur);o2.stop(t+dur);
+}
+
+function playChordNow(midi){
+  var ctx=gAC();if(ctx.state==='suspended')ctx.resume();
+  if(!rv)rv=mkReverb(ctx);
+  var t=ctx.currentTime;
+  midi.forEach(function(n){playN(ctx,rv,mf(n),t,2.5);});
+}
+
+function playProgSeq(chords,btn){
+  var ctx=gAC();if(ctx.state==='suspended')ctx.resume();
+  if(!rv)rv=mkReverb(ctx);
+  btn.classList.add('on');btn.textContent='■ Tocando...';
+  chords.forEach(function(ch,i){
+    var t=ctx.currentTime+i*1.7;
+    ch.midi.forEach(function(n){playN(ctx,rv,mf(n),t,2.2);});
+  });
+  setTimeout(function(){btn.classList.remove('on');btn.textContent='▶ Loop';},chords.length*1700+600);
+}
+
+function playPhrygianDemo(){
+  var ctx=gAC();if(ctx.state==='suspended')ctx.resume();
+  if(!rv)rv=mkReverb(ctx);
+  var btn=document.getElementById('phrygBtn');
+  btn.textContent='■ Playing...';btn.classList.add('on');
+  [[46,58,62,65],[45,57,60,64,71],[46,58,62,65],[45,57,60,64,71]].forEach(function(ch,i){
+    var t=ctx.currentTime+i*1.8;
+    ch.forEach(function(n){playN(ctx,rv,mf(n),t,2.3);});
+  });
+  setTimeout(function(){btn.textContent='▶ Escuchar';btn.classList.remove('on');},8000);
+}
+
+// ── PIANO SVG ──────────────────────────────────
+function piano(pcs, opts){
+  opts=opts||{};
+  var wkW=opts.wkW||16,wkH=opts.wkH||56,bkW=opts.bkW||10,bkH=opts.bkH||34,no=opts.no||2;
+  var ac_color=opts.ac||'#d4781a',alt_color=opts.alt_c||'#7c5cbf';
+  var altPcs=new Set(opts.altPcs||[]);
+  var hlPcs=new Set(pcs);
+  var whites=[0,2,4,5,7,9,11];
+  var bkOf=[
+    {pc:1,x:wkW-bkW/2},
+    {pc:3,x:2*wkW-bkW/2},
+    {pc:6,x:4*wkW-bkW/2},
+    {pc:8,x:5*wkW-bkW/2},
+    {pc:10,x:6*wkW-bkW/2}
+  ];
+  var tw=7*no*wkW,th=wkH+4;
+  var s='<svg width="'+tw+'" height="'+th+'" viewBox="0 0 '+tw+' '+th+'" style="display:block">';
+  for(var oct=0;oct<no;oct++){
+    whites.forEach(function(pc,wi){
+      var x=(oct*7+wi)*wkW;
+      var isAlt=altPcs.has(pc),isHl=hlPcs.has(pc);
+      var fill=isAlt?alt_color:isHl?ac_color:'#1e1e1e';
+      s+='<rect x="'+(x+.5)+'" y=".5" width="'+(wkW-1)+'" height="'+(wkH-1)+'" rx="2" fill="'+fill+'" stroke="#080808" stroke-width=".5"/>';
+      if(isHl||isAlt){
+        var nm=['C','','D','','E','F','','G','','A','','B'][pc];
+        s+='<text x="'+(x+wkW/2)+'" y="'+(wkH-6)+'" text-anchor="middle" font-size="9" fill="#fff" font-family="DM Mono,monospace">'+nm+'</text>';
+      }
+    });
+  }
+  for(var oct=0;oct<no;oct++){
+    var ox=oct*7*wkW;
+    bkOf.forEach(function(bk){
+      var isAlt=altPcs.has(bk.pc),isHl=hlPcs.has(bk.pc);
+      var fill=isAlt?alt_color:isHl?ac_color:'#0d0d0d';
+      s+='<rect x="'+(ox+bk.x)+'" y=".5" width="'+bkW+'" height="'+(bkH-1)+'" rx="1" fill="'+fill+'" stroke="#050505" stroke-width=".5"/>';
+      if(isHl||isAlt){
+        var nm=['','C#','','D#','','','F#','','G#','','A#',''][bk.pc];
+        s+='<text x="'+(ox+bk.x+bkW/2)+'" y="'+(bkH-4)+'" text-anchor="middle" font-size="8" fill="#fff" font-family="DM Mono,monospace">'+nm+'</text>';
+      }
+    });
+  }
+  s+='</svg>';
+  return s;
+}
+
+// ── DATA ──────────────────────────────────────
+var scales=[
+  {
+    name:'Natural Minor',aka:'Aeolian',hl:false,
+    formula:'T – St – T – T – St – T – T',
+    pcs:[9,11,0,2,4,5,7],
+    notes:['A','B','C','D','E','F','G'],
+    altPcs:[]
+  },
+  {
+    name:'Phrygian',aka:'Modo Frigio',hl:true,
+    formula:'St – T – T – T – St – T – T',
+    pcs:[9,10,0,2,4,5,7],
+    notes:['A','B♭','C','D','E','F','G'],
+    altPcs:[10]
+  }
+];
+
+var progressions=[
+  {
+    name:'"Goosebumps Loop"',mood:'Oscuro · Hipnótico',bpm:'138–148',
+    note:'El D en quinta vacía (sin tercera) flota sobre el 808 — ambiguo entre mayor y menor. El A#maj7/D# baja medio tono en el bajo (D#) creando la caída Frigia. El C6sus2 cierra el ciclo con la sexta mayor (A) como tensión suspendida que no resuelve.',
+    chords:[
+      {name:'D',roman:'i',notes:'D2–A3–D4–A4',midi:[38,57,62,69],pc:[2,9,2,9]},
+      {name:'A#maj7/D#',roman:'♭VI',notes:'D#2–A3–D4–A#4',midi:[39,57,62,70],pc:[3,9,2,10]},
+      {name:'C6sus2',roman:'♭VII',notes:'C2–A3–D4–G4',midi:[36,57,62,67],pc:[0,9,2,7]}
+    ]
+  },
+  {
+    name:'"Phrygian Pull"',mood:'Tenso · Minimalista',bpm:'130–165',
+    note:'El movimiento más puro del Frigio en A#m. El B sobre A#m — solo medio tono en el bajo. El voicing varía en la cuarta nota del B: F#4 vs F#3–D#4, generando microevolución sin cambiar la armonía. Tensión máxima, movimiento mínimo.',
+    chords:[
+      {name:'A#m',roman:'i',notes:'A#2–C#3–F3–F4',midi:[46,49,53,65],pc:[10,1,5,5]},
+      {name:'B',roman:'♭II',notes:'B2–D#3–F#4–B4',midi:[47,51,66,71],pc:[11,3,6,11]},
+      {name:'A#m',roman:'i',notes:'A#2–C#3–F3–C#4',midi:[46,49,53,61],pc:[10,1,5,1]},
+      {name:'B',roman:'♭II',notes:'B2–D#3–F#3–D#4',midi:[47,51,54,63],pc:[11,3,6,3]}
+    ]
+  },
+  {
+    name:'"Astroworld Sentimental"',mood:'Emocional · Dreamy',bpm:'110–130',
+    note:'El Gm abre con la A# duplicada en registro superior — esa octava duplicada da cuerpo al pad. El D#6 es el acorde más denso del loop con cinco notas incluyendo la C5 como sexta mayor. El Dm cierra como el v natural de Gm, sin resolver al tónico.',
+    chords:[
+      {name:'Gm',roman:'i',notes:'G3–A#3–D4–A#4',midi:[55,58,62,70],pc:[7,10,2,10]},
+      {name:'D#6',roman:'♭VI',notes:'D#3–G3–A#3–D#4–C5',midi:[51,55,58,63,72],pc:[3,7,10,3,0]},
+      {name:'D#',roman:'♭VI',notes:'D#3–G3–A#3–G4',midi:[51,55,58,67],pc:[3,7,10,7]},
+      {name:'Dm',roman:'v',notes:'D3–F3–A3–D4–A4',midi:[50,53,57,62,69],pc:[2,5,9,2,9]}
+    ]
+  },
+  {
+    name:'"Cinematic Dark"',mood:'Épico · Oscuro',bpm:'130–150',
+    note:'El movimiento de semitono en el bajo (G→G#) entre el Gm7 y el G#6 es el gesto Frigio comprimido. El Fm9 con seis notas crea la mayor densidad del loop. El Gm/A# cierra con la A# como bajo pedal — el acorde de tónica apoyado en la sexta menor.',
+    chords:[
+      {name:'Gm7',roman:'i',notes:'G2–G3–A#3–D4–F4',midi:[43,55,58,62,65],pc:[7,7,10,2,5]},
+      {name:'G#6',roman:'♭II',notes:'G#2–G#3–C4–D#4–F4',midi:[44,56,60,63,65],pc:[8,8,0,3,5]},
+      {name:'Fm9',roman:'♭VII',notes:'F2–G#2–G#3–C4–D#4–G4',midi:[41,44,56,60,63,67],pc:[5,8,8,0,3,7]},
+      {name:'Gm/A#',roman:'i',notes:'A#2–A#3–D4–G4–A#4',midi:[46,58,62,67,70],pc:[10,10,2,7,10]}
+    ]
+  },
+  {
+    name:'"Sicko Mode Dark"',mood:'Cinematic · Agresivo',bpm:'150–170',
+    note:'El D#maj7/G es el ♭VI con G en el bajo — la maj7 (D) sobre D# crea disonancia suave que pide resolver. El Gsus2 sin tercera es ambiguo: ¿mayor o menor? Esa ambigüedad sostenida es la tensión que define el loop. El 808 en G ancla todo.',
+    chords:[
+      {name:'D#maj7/G',roman:'♭VI',notes:'G2–D#3–G3–A#3–D4',midi:[43,51,55,58,62],pc:[7,3,7,10,2]},
+      {name:'Gsus2',roman:'i',notes:'G2–D3–G3–A3–D4',midi:[43,50,55,57,62],pc:[7,2,7,9,2]},
+      {name:'D#maj7/G',roman:'♭VI',notes:'G2–D#3–G3–A#3–D4',midi:[43,51,55,58,62],pc:[7,3,7,10,2]},
+      {name:'Gsus2',roman:'i',notes:'G2–D3–G3–A3–D4',midi:[43,50,55,57,62],pc:[7,2,7,9,2]}
+    ]
+  }
+];
+
+var voicings=[
+  {
+    name:'Am7 — Spread',type:'Minor 7th · Voz abierta',
+    notes:'A2 – C4 – G4 – B4',
+    midi:[45,60,67,71],
+    pcs:[9,0,7,11],
+    desc:'La quinta omitida, séptima y novena en registro superior. El gap central es la clave del sonido aéreo. Sin la quinta, el 808 tiene espacio para respirar.'
+  },
+  {
+    name:'Am(add9)',type:'Minor Add9 · Dreamy',
+    notes:'A2 – E3 – A3 – B3 – E4',
+    midi:[45,52,57,59,64],
+    pcs:[9,4,9,11,4],
+    desc:'La 9na (B) sobre Am sin séptima. Más limpio que el Am7 — ideal para plucks sencillos y leads de alta frecuencia.'
+  },
+  {
+    name:'B♭maj7',type:'♭II Major 7 · Phrygian chord',
+    notes:'B♭2 – F3 – B♭3 – D4 – A4',
+    midi:[46,53,58,62,69],
+    pcs:[10,5,10,2,9],
+    desc:'El acorde Frigio con major 7. La A natural (maj7) sobre Bb crea disonancia que pide resolver al Am. Devastador en loop con un Am.'
+  },
+  {
+    name:'Asus2',type:'Suspended · Ambiguo',
+    notes:'A2 – B2 – E3 – A3',
+    midi:[45,47,52,57],
+    pcs:[9,11,4,9],
+    desc:'Sin la tercera — ambiguo entre major y minor. Esta ambigüedad es lo que hace que los pads Travis funcionen en cualquier contexto armónico.'
+  }
+];
+
+// ── RENDER ──────────────────────────────────────
+
+// Scales
+var sg=document.getElementById('scaleGrid');
+scales.forEach(function(sc){
+  var div=document.createElement('div');
+  div.className='scale-card';
+  var normalPcs=sc.pcs.filter(function(p){return !sc.altPcs.includes(p);});
+  var altS=new Set(sc.altPcs);
+  div.innerHTML=
+    '<div class="scale-name'+(sc.hl?' hl':'')+'">'+sc.name+' <span style="font-family:\'DM Mono\',monospace;font-size:12px;color:var(--mu)">'+sc.aka+'</span></div>'+
+    '<div class="scale-formula">'+sc.formula+'</div>'+
+    piano(normalPcs,{no:2,altPcs:sc.altPcs})+
+    '<div class="scale-notes">'+
+    sc.notes.map(function(n,i){
+      var isDiff=sc.altPcs.includes(sc.pcs[i]);
+      return '<span class="note-pill '+(isDiff?'diff':'on')+'">'+n+'</span>';
+    }).join('')+
+    '</div>'+
+    (sc.altPcs.length?'<p class="diff-note">B♭ (rojo) es la ♭2 — la nota que define el modo Frigio y el sonido Travis.</p>':'');
+  sg.appendChild(div);
+});
+
+// Phrygian box piano
+document.getElementById('phrygPiano').innerHTML=piano([10,2,5],{no:2});
+
+// Progressions
+var pl=document.getElementById('progList');
+progressions.forEach(function(prog,pi){
+  var div=document.createElement('div');
+  div.className='prog-item';
+  var chordsHTML=prog.chords.map(function(ch,ci){
+    var sep=ci>0?'<span class="chord-sep">›</span>':'';
+    var midiStr='['+ch.midi.join(',')+']';
+    return sep+'<div class="chord-card" onclick="playChordNow('+midiStr+')">'+
+      '<div class="c-roman">'+ch.roman+'</div>'+
+      '<div class="c-name">'+ch.name+'</div>'+
+      piano(ch.pc,{no:1,wkW:13,wkH:44,bkW:8,bkH:27})+
+      '<div class="c-notes">'+ch.notes+'</div>'+
+      '</div>';
+  }).join('');
+  div.innerHTML=
+    '<div class="prog-hdr">'+
+      '<div><div class="prog-name">'+prog.name+'</div><div class="prog-mood">'+prog.mood+' · '+prog.bpm+' BPM</div></div>'+
+      '<button class="play-btn" onclick="playProgSeq(progressions['+pi+'].chords,this)">▶ Loop</button>'+
+    '</div>'+
+    '<div class="chord-row">'+chordsHTML+'</div>'+
+    '<div class="prog-note">'+prog.note+'</div>';
+  pl.appendChild(div);
+});
+
+// Voicings
+var vg=document.getElementById('voicingGrid');
+voicings.forEach(function(v){
+  var div=document.createElement('div');
+  div.className='v-card';
+  var midiStr='['+v.midi.join(',')+']';
+  div.innerHTML=
+    '<div class="v-title">'+v.name+'</div>'+
+    '<div class="v-type">'+v.type+'</div>'+
+    piano(v.pcs.map(function(p){return p%12;}),{no:2})+
+    '<div class="v-desc">'+v.desc+'</div>'+
+    '<div class="v-notes">'+v.notes+'</div>';
+  div.onclick=function(){playChordNow(v.midi);};
+  vg.appendChild(div);
+});
+
+// Charts
+var fd=[
+  {n:'TRAVIS',s:0,m:4,l:31},{n:'Agresive',s:1,m:5,l:13},{n:'Agr V2',s:4,m:7,l:24},
+  {n:'Agr V3',s:4,m:12,l:11},{n:'Agr V4',s:0,m:6,l:41},{n:'B_Menor',s:0,m:38,l:25},
+  {n:'CLASSIC',s:7,m:13,l:15},{n:'CLASSIC2',s:0,m:10,l:2},{n:'CLASSIC3',s:0,m:8,l:13},
+  {n:'Love',s:10,m:8,l:4},{n:'SAD',s:9,m:19,l:28},{n:'SICKO',s:2,m:12,l:9},
+  {n:'X_DRAKE',s:16,m:14,l:33},{n:'v2',s:4,m:13,l:20},{n:'Trap_Sent',s:0,m:30,l:19},
+  {n:'Bad',s:7,m:18,l:11},{n:'Dark',s:0,m:54,l:23},{n:'Hills',s:4,m:8,l:23},
+  {n:'Melodic',s:7,m:14,l:17},{n:'D_Menor',s:0,m:28,l:13}
+];
+
+new Chart(document.getElementById('intChart'),{
+  type:'bar',
+  data:{
+    labels:fd.map(function(d){return d.n;}),
+    datasets:[
+      {label:'Semitono',data:fd.map(function(d){return d.s;}),backgroundColor:'#1D9E75',stack:'s'},
+      {label:'Medio',data:fd.map(function(d){return d.m;}),backgroundColor:'#5b9bd5',stack:'s'},
+      {label:'Salto',data:fd.map(function(d){return d.l;}),backgroundColor:'#d4781a',stack:'s'}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{
+      x:{ticks:{color:'#555',font:{size:9,family:'DM Mono'},maxRotation:60,autoSkip:false},grid:{color:'#181818'}},
+      y:{ticks:{color:'#555',font:{size:10,family:'DM Mono'}},grid:{color:'#181818'}}
+    }
+  }
+});
+
+new Chart(document.getElementById('scChart'),{
+  type:'doughnut',
+  data:{
+    labels:['Natural Minor','Phrygian','Major'],
+    datasets:[{data:[11,8,1],backgroundColor:['#7c5cbf','#d4781a','#2a2a2a'],borderWidth:0}]
+  },
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'70%'}
+});
+</script>
+</body>
+</html>
